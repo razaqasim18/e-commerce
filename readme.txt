@@ -1,0 +1,1 @@
+e-commerce project with custom functionality of commission with user,admin guards with functions pagination, search, notification(database , mail) with queue, cron job, barryvdh/laravel-dompdf, darryldecode/cart, spatie/laravel-medialibrary
