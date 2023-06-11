@@ -132,22 +132,33 @@ class CustomHelper
     // all users
     public static function calculateUsersRank()
     {
-        $user = User::select('*', 'users.id AS userid')->join('points', 'points.user_id', '=', 'users.id')->where('users.is_blocked', '0')->get();
-        $commission = Commission::all();
-        foreach ($user as $userrow) {
-            foreach ($commission as $commissionrow) {
-                if ($userrow->point >= $commissionrow->points) {
-                    Point::updateOrCreate(
-                        ['user_id' => $userrow->userid],
-                        ['commission_id' => $commissionrow->id]
-                    );
-                    wallet::updateOrCreate(
-                        ['user_id' => $userrow->userid],
-                        ['gift' => $commissionrow->gift]
-                    );
+        $user = User::select('commission_id', 'users.id AS userid', 'point')->join('points', 'points.user_id', '=', 'users.id')->where('users.is_blocked', '0')->get();
+    $commission = Commission::all();
+    foreach ($user as $userrow) {
+        foreach ($commission as $commissionrow) {
+            if ($userrow->point >= $commissionrow->points) {
+                Point::updateOrCreate(
+                    ['user_id' => $userrow->userid],
+                    ['commission_id' => $commissionrow->id]
+                );
+                if ($userrow->commission_id == null || $userrow->commission_id < $commissionrow->id) {
+                    DB::transaction(function () use ($userrow, $commissionrow) {
+                        $wallet = Wallet::updateOrCreate(
+                            ['user_id' => $userrow->userid],
+                            ['gift' => DB::raw('gift + ' . $commissionrow->gift)]
+                        );
+                        WalletTransaction::insert([
+                            'wallet_id' => $wallet->id,
+                            'amount' => $commissionrow->gift,
+                            'is_gift' => 1,
+                            'status' => 1,
+                        ]);
+                    });
                 }
             }
         }
+    }
+
 
     }
 
@@ -162,13 +173,24 @@ class CustomHelper
                         ['user_id' => $userid],
                         ['commission_id' => $commissionrow->id]
                     );
-                    Wallet::updateOrCreate(
-                        ['user_id' => $userid],
-                        ['gift' => $commissionrow->gift]
-                    );
+                    if ($user->commission_id == null || $user->commission_id < $commissionrow->id) {
+                        DB::transaction(function () use ($userid, $commissionrow) {
+                            $wallet = Wallet::updateOrCreate(
+                                ['user_id' => $userid],
+                                ['gift' => DB::raw('gift + ' . $commissionrow->gift)]
+                            );
+                            WalletTransaction::insert([
+                                'wallet_id' => $wallet->id,
+                                'amount' => $commissionrow->gift,
+                                'is_gift' => 1,
+                                'status' => 1,
+                            ]);
+                        });
+                    }
                 }
             }
         }
+
     }
 
     public static function calculateAllPoints($userid)

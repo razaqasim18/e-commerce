@@ -100,7 +100,7 @@
                 var category = $("select.category option:selected").val();
                 var price = $("select.price option:selected").val();
                 var sort = $("select.sort option:selected").val();
-                var url = "{{ url('') }}" + "/shop/search?page=" + page + "&category=" +
+                var url = "{{ url('') }}" + "/other-brand/search?page=" + page + "&category=" +
                     category +
                     "&price=" + price + "&sort=" + sort + "&other=1";
                 $.ajax({

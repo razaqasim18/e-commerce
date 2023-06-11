@@ -124,7 +124,7 @@
                                                     Client Rank
                                                 </th>
                                                 <td class="text-center">
-                                                    {{ $client->userpoint != null ? $client->userpoint->commission->title : '' }}
+                                                    {{ $client->userpoint != null ? ($client->userpoint->commission ? $client->userpoint->commission->title : '') : '' }}
                                                 </td>
                                             </tr>
                                             <tr>

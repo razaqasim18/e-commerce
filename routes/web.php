@@ -9,6 +9,7 @@ use App\Models\Wallet;
 use App\Models\WalletTransaction;
 use App\Notifications\AdminNotification;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
 
@@ -89,9 +90,43 @@ Route::get('/calculate-commission/{id}', function ($userid) {
     echo "Commission " . $childcommision . "<br/>";
 });
 
-//change commission points
-Route::get('/rank', function () {
-    $user = User::select('*', 'users.id AS userid')->join('points', 'points.user_id', '=', 'users.id')->where('users.is_blocked', '0')->get();
+//change user rank
+Route::get('/rank/{id}', function ($userid) {
+    // $singleUserRankJob = new singleUserRankJob($id);
+    // Queue::push($singleUserRankJob);
+
+    $user = User::select('*', 'users.id AS userid')->join('points', 'points.user_id', '=', 'users.id')->where('users.is_blocked', '0')->where('users.id', $userid)->first();
+    if ($user) {
+        $commission = Commission::all();
+        foreach ($commission as $commissionrow) {
+            if ($user->point >= $commissionrow->points) {
+                Point::updateOrCreate(
+                    ['user_id' => $userid],
+                    ['commission_id' => $commissionrow->id]
+                );
+                if ($user->commission_id == null || $user->commission_id < $commissionrow->id) {
+                    DB::transaction(function () use ($userid, $commissionrow) {
+                        $wallet = Wallet::updateOrCreate(
+                            ['user_id' => $userid],
+                            ['gift' => DB::raw('gift + ' . $commissionrow->gift)]
+                        );
+                        WalletTransaction::insert([
+                            'wallet_id' => $wallet->id,
+                            'amount' => $commissionrow->gift,
+                            'is_gift' => 1,
+                            'status' => 1,
+                        ]);
+                    });
+                }
+            }
+        }
+    }
+
+});
+
+//change all user rank
+Route::get('/all/rank', function () {
+    $user = User::select('commission_id', 'users.id AS userid', 'point')->join('points', 'points.user_id', '=', 'users.id')->where('users.is_blocked', '0')->get();
     $commission = Commission::all();
     foreach ($user as $userrow) {
         foreach ($commission as $commissionrow) {
@@ -100,13 +135,24 @@ Route::get('/rank', function () {
                     ['user_id' => $userrow->userid],
                     ['commission_id' => $commissionrow->id]
                 );
-                wallet::updateOrCreate(
-                    ['user_id' => $userrow->userid],
-                    ['gift' => $commissionrow->gift]
-                );
+                if ($userrow->commission_id == null || $userrow->commission_id < $commissionrow->id) {
+                    DB::transaction(function () use ($userrow, $commissionrow) {
+                        $wallet = Wallet::updateOrCreate(
+                            ['user_id' => $userrow->userid],
+                            ['gift' => DB::raw('gift + ' . $commissionrow->gift)]
+                        );
+                        WalletTransaction::insert([
+                            'wallet_id' => $wallet->id,
+                            'amount' => $commissionrow->gift,
+                            'is_gift' => 1,
+                            'status' => 1,
+                        ]);
+                    });
+                }
             }
         }
     }
+
 });
 
 // home pages
@@ -119,7 +165,6 @@ Route::get('/terms-condition', [App\Http\Controllers\FrontController::class, 'te
 Route::get('/contact-us', [App\Http\Controllers\FrontController::class, 'contactUs'])->name('contact.us');
 Route::get('/about-us', [App\Http\Controllers\FrontController::class, 'aboutUs'])->name('about.us');
 Route::get('/success-stories', [App\Http\Controllers\FrontController::class, 'successStories'])->name('success.stories');
-Route::get('/other-brand', [App\Http\Controllers\FrontController::class, 'otherBrand'])->name('other.brand');
 
 //blogs
 Route::get('/blogs', [App\Http\Controllers\FrontController::class, 'blogs'])->name('blogs');
@@ -128,6 +173,9 @@ Route::get('/blog/{id}', [App\Http\Controllers\FrontController::class, 'blogSing
 // shop
 Route::get('/shop', [App\Http\Controllers\FrontController::class, 'shop'])->name('shop');
 Route::get('/shop/search', [App\Http\Controllers\FrontController::class, 'shopSearch'])->name('shop.search');
+
+Route::get('/other-brand', [App\Http\Controllers\FrontController::class, 'otherBrand'])->name('other.brand');
+Route::get('/other-brand/search', [App\Http\Controllers\FrontController::class, 'otherBrandSearch'])->name('other.brand.search');
 
 // single product
 Route::get('/product/detail/{id}', [App\Http\Controllers\FrontController::class, 'productDetail'])->name('product.detail');

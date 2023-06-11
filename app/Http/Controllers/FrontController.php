@@ -100,22 +100,44 @@ class FrontController extends Controller
         $order->payment_by = $request->payment_by;
         $orderresponse = $order->save();
 
-        foreach (\Cart::getContent() as $item) {
-            $orderdetail[] = [
-                'order_id' => $order->id,
-                'product_id' => $item->id,
-                'product' => $item->name,
-                'weight' => $item->attributes->product_weight,
-                'quantity' => $item->quantity,
-                'points' => $item->attributes->product_points,
-                'price' => $item->price,
-            ];
-            $product = Product::find($item->id);
-            $product->stock = $product->stock - $item->quantity;
-            if ($product->stock <= 0) {
-                $product->in_stock = 0;
+        if (\Cart::session('normal')->getContent()->count()) {
+            foreach (\Cart::session('normal')->getContent() as $item) {
+                $orderdetail[] = [
+                    'order_id' => $order->id,
+                    'product_id' => $item->id,
+                    'product' => $item->name,
+                    'weight' => $item->attributes->product_weight,
+                    'quantity' => $item->quantity,
+                    'points' => $item->attributes->product_points,
+                    'price' => $item->price,
+                ];
+                $product = Product::find($item->id);
+                $product->stock = $product->stock - $item->quantity;
+                if ($product->stock <= 0) {
+                    $product->in_stock = 0;
+                }
+                $product->save();
             }
-            $product->save();
+        }
+
+        if (\Cart::session('discount')->getContent()->count()) {
+            foreach (\Cart::session('discount')->getContent() as $item) {
+                $orderdetail[] = [
+                    'order_id' => $order->id,
+                    'product_id' => $item->id,
+                    'product' => $item->name,
+                    'weight' => $item->attributes->product_weight,
+                    'quantity' => $item->quantity,
+                    'points' => $item->attributes->product_points,
+                    'price' => $item->price,
+                ];
+                $product = Product::find($item->id);
+                $product->stock = $product->stock - $item->quantity;
+                if ($product->stock <= 0) {
+                    $product->in_stock = 0;
+                }
+                $product->save();
+            }
         }
 
         $orderdetailresponse = OrderDetail::insert($orderdetail);
@@ -142,8 +164,9 @@ class FrontController extends Controller
 
         if ($orderresponse && $orderdetailresponse && $ordershippindetailresponse && $walletresponse) {
             DB::commit();
-            \Cart::clear();
-
+            \Cart::session('normal')->clear();
+            \Cart::session('discount')->clear();
+            // Cart::
             $msg = "New order has been placed";
             $type = 4;
             $link = "admin/order/detail/" . $order->id;
@@ -199,6 +222,31 @@ class FrontController extends Controller
         ]);
     }
 
+    public function otherBrandSearch(Request $request)
+    {
+        if ($request->ajax()) {
+            $productquery = Product::query()->where('is_active', 1);
+            if ($request->category) {
+                $productquery->where("category_id", $request->category);
+            }
+
+            if ($request->has('price')) {
+                ($request->price) ? $productquery->orderBy("price", "DESC") : $productquery->orderBy("price", "ASC");
+            }
+            if ($request->has('sort')) {
+                ($request->sort) ? $productquery->orderBy("product", "ASC") : $productquery->orderBy("price", "ASC");
+            }
+            $productquery->where("is_other", '1');
+
+            $product = $productquery->orderBy('id', 'DESC')->paginate(9);
+            $category = Category::where('is_active', 1)->get();
+            return view('include.shop', [
+                'category' => $category,
+                'product' => $product,
+            ])->render();
+        }
+    }
+
     public function shop()
     {
         $category = Category::where('is_active', 1)->get();
@@ -223,7 +271,7 @@ class FrontController extends Controller
             if ($request->has('sort')) {
                 ($request->sort) ? $productquery->orderBy("product", "ASC") : $productquery->orderBy("price", "ASC");
             }
-            $productquery->where("is_other", (Route::has('other') == '1') ? '1' : '0');
+            $productquery->where("is_other", '0');
 
             $product = $productquery->orderBy('id', 'DESC')->paginate(9);
             $category = Category::where('is_active', 1)->get();

@@ -5535,7 +5535,7 @@ a.dropdown-item.active {
 }
 
 .dropdown-list .dropdown-list-content {
-    /* height: 250px; */
+    height: 250px;
     overflow: hidden
 }
 

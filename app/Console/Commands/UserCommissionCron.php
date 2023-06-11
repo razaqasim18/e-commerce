@@ -2,10 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\userCommsionJob;
+use App\Helpers\CustomHelper;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Queue;
-
 
 class UserCommissionCron extends Command
 {
@@ -29,7 +27,9 @@ class UserCommissionCron extends Command
     public function handle()
     {
         info("Users Commission Job running at " . now());
-        $userCommsionJob = new userCommsionJob();
-        Queue::push($userCommsionJob);
+        CustomHelper::directChildCommission();
+
+        // $userCommsionJob = new userCommsionJob();
+        // Queue::push($userCommsionJob);
     }
 }

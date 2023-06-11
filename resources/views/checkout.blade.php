@@ -130,7 +130,12 @@
                                 <div class="content">
                                     @php
                                         $attribute = $weight = $subtotal = 0;
-                                        foreach (\Cart::getContent() as $item) {
+                                        foreach (\Cart::session('normal')->getContent() as $item) {
+                                            $attribute = $attribute + $item->attributes->product_points;
+                                            $weight = $weight + $item->attributes->product_weight;
+                                            $subtotal = $subtotal + $item->getPriceSum();
+                                        }
+                                        foreach (\Cart::session('discount')->getContent() as $item) {
                                             $attribute = $attribute + $item->attributes->product_points;
                                             $weight = $weight + $item->attributes->product_weight;
                                             $subtotal = $subtotal + $item->getPriceSum();
@@ -242,7 +247,12 @@
                                 <div class="content">
                                     <div class="button">
                                         <button type="submit" class="btn"
-                                            @if (!(Auth::guard('web')->user() && Auth::guard('web')->user()->userdetail && \Cart::getContent()->count())) disabled @endif>proceed to checkout</button>
+                                            @if (
+                                                !(Auth::guard('web')->user() &&
+                                                    Auth::guard('web')->user()->userdetail &&
+                                                    (\Cart::session('normal')->getContent()->count() ||
+                                                        \Cart::session('discount')->getContent()->count())
+                                                )) disabled @endif>proceed to checkout</button>
                                     </div>
                                 </div>
                             </div>

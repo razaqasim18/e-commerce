@@ -141,7 +141,10 @@
                             <button id="deleteButton" data-id="{{ $order->id }}"
                                 class="btn btn-danger btn-icon icon-left">Delete</button>
                         </div>
-                        <button class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</button>
+                        <a href="{{ route('admin.order.print.pdf', $order->id) }}">
+
+                            <button class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</button>
+                        </a>
                     </div>
                 </div>
             </div>
