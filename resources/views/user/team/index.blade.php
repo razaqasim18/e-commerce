@@ -22,7 +22,7 @@
                                             <div class="">
                                                 <img alt="image"
                                                     src="{{ $row->image ? asset('uploads/user_profile') . '/' . $row->image : asset('img/users/user-3.png') }}"
-                                                    class="rounded-circle" width="100" title=""
+                                                    class="rounded-circle" width="100px" height="100px" title=""
                                                     data-original-title="{{ $row->name }}">
                                             </div>
                                             <div class="mt-2 font-weight-bold">
@@ -42,7 +42,7 @@
                                         <div class="col mb-4 mb-lg-0 text-center m-3">
                                             <div class="">
                                                 <img alt="image" src="{{ asset('img/users/user-3.png') }}"
-                                                    class="rounded-circle" width="100">
+                                                    class="rounded-circle" width="100px" height="100px">
                                             </div>
                                             <div class="mt-2 font-weight-bold">
                                                 No User Found<br />

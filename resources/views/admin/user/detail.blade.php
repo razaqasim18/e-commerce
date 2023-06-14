@@ -87,11 +87,12 @@
                                                             target="_blank">
                                                             <img class="rounded-circle"
                                                                 src="{{ asset('uploads/cnic') . '/' . $client->cnic_image_front }}"
-                                                                width="100px">
+                                                                width="70px" height="70px">
                                                         </a>
                                                     @else
                                                         <img class="rounded-circle"
-                                                            src="{{ asset('img/products/product-5.png') }}" width="70px">
+                                                            src="{{ asset('img/products/product-5.png') }}" width="70px"
+                                                            height="70px">
                                                     @endif
                                                 </td>
                                                 <th>
@@ -104,11 +105,12 @@
                                                             target="_blank">
                                                             <img class="rounded-circle"
                                                                 src="{{ asset('uploads/cnic') . '/' . $client->cnic_image_back }}"
-                                                                width="100px">
+                                                                width="70px" height="70px">
                                                         </a>
                                                     @else
                                                         <img class="rounded-circle"
-                                                            src="{{ asset('img/products/product-5.png') }}" width="70px">
+                                                            src="{{ asset('img/products/product-5.png') }}" width="70px"
+                                                            height="70px">
                                                     @endif
                                                 </td>
 

@@ -128,7 +128,7 @@
                                 <div class="author-box-center">
                                     <img alt="image"
                                         src="{{ Auth::guard('web')->user()->image ? asset('uploads/user_profile') . '/' . Auth::guard('web')->user()->image : asset('img/users/user-3.png') }}"
-                                        class="rounded-circle author-box-picture">
+                                        class="rounded-circle author-box-picture" width="100px" height="100px">
                                     <div class="clearfix"></div>
                                     <div class="author-box-name">
                                         <h4 class="mt-2">{{ Auth::guard('web')->user()->name }}</h4>

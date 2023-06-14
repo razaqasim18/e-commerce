@@ -1,27 +1,28 @@
 @extends('layouts.eshop')
 @section('style')
+    <style type="text/css">
+        .box {
+            width: 600px;
+            margin: 0 auto;
+        }
+
+        li.page-item {
+            float: left;
+        }
+
+        .shop .nice-select {
+            width: 100% !important;
+        }
+
+        .colstyle {
+            margin: 1%;
+            border-radius: 4px;
+            padding: 5%;
+            box-shadow: 0px 0px 6px 0px {{ SettingHelper::getSettingValueBySLug('site_secondary_color') }};
+        }
+    </style>
 @endsection
-<style type="text/css">
-    .box {
-        width: 600px;
-        margin: 0 auto;
-    }
 
-    li.page-item {
-        float: left;
-    }
-
-    .shop .nice-select {
-        width: 100% !important;
-    }
-
-    .colstyle {
-        margin: 1%;
-        border-radius: 4px;
-        padding: 5%;
-        box-shadow: 0px 0px 6px 0px {{ SettingHelper::getSettingValueBySLug('site_secondary_color') }};
-    }
-</style>
 @section('content')
     <!-- Product Style -->
     <section class="product-area shop-sidebar shop section">

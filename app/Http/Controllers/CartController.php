@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CartHelper;
 use App\Helpers\SettingHelper;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
@@ -19,6 +21,9 @@ class CartController extends Controller
         $product = Product::findorFail($request->productid);
         $price = (SettingHelper::getSettingValueBySLug('gst_charges')) ?
         ceil($product->price + $product->price / SettingHelper::getSettingValueBySLug('gst_charges')) : $product->price;
+        if($request->discount_coupon){
+            $price = $price - ($price * (20/100));
+        }
         $item = \Cart::session('normal')->get($request->productid);
         if ($item) {
             $stock = $request->quantity + $item->quantity;
@@ -69,10 +74,26 @@ class CartController extends Controller
 
     public function insertDiscount(Request $request)
     {
+        if(Auth::guard('web')->check()){
+            if(CartHelper::cartDiscountCount(Auth::guard('web')->user()->id)) {
+                $json = ['type' => 0, 'msg' => 'Reached Monthly Discount Product Limit'];
+                return response()->json($json);
+            }
+        } else {
+            $json = ['type' => 0, 'msg' => 'Please Login To Add Discount Product'];
+            return response()->json($json);
+        }
+
         $product = Product::findorFail($request->productid);
         $price = (SettingHelper::getSettingValueBySLug('gst_charges')) ?
         ceil($product->price + $product->price / SettingHelper::getSettingValueBySLug('gst_charges')) : $product->price;
         $price = $price - ($product->price * ($product->discount / 100));
+
+        $countDiscountCart = \Cart::session('discount')->getContent()->count();
+        if( $countDiscountCart >= 3){
+            $json = ['type' => 0, 'msg' => 'Discount Product is out of limit'];
+            return response()->json($json);
+        }
 
         $item = \Cart::session('discount')->get($request->productid);
         if ($item) {
@@ -82,7 +103,7 @@ class CartController extends Controller
                 return response()->json($json);
             }
 
-            $item = \Cart::get($request->productid);
+            $item = \Cart::session('discount')->get($request->productid);
             $item->attributes->put('product_points', $item->attributes->product_points * $request->quantity);
             $item->attributes->put('product_weight', $item->attributes->product_weight * $request->quantity);
             \Cart::update($request->productid, $item);

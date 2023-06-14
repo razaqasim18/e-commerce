@@ -1436,11 +1436,11 @@ Version:1.0
 
 .hero-slider .single-slider {
     height: auto;
-    /* background-image: url('https://via.placeholder.com/1900x700'); */
+    background-image: url('../eshop/images/banner.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    /* height: 510px; */
+    /*height: 510px;*/
 }
 
 .hero-slider .text-inner {}
@@ -3552,7 +3552,7 @@ span.badge.customheaderBadge1.bg-info {
 .shopping-summery tbody .price span {}
 
 .shopping-cart tbody .qty .input-group {
-    width: 175px;
+    width: 100%;
     display: inline-block;
 }
 

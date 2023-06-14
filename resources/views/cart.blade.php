@@ -126,7 +126,7 @@
                                                 </button>
                                             </div>
                                             <input type="text" id="" class="input-number"
-                                                value="{{ $item->quantity }}">
+                                                value="{{ $item->quantity }}" readonly>
                                             <div class="button plus">
                                                 <button type="button" class="btn btn-primary btn-number"
                                                     data-type="plus" disabled>
@@ -162,7 +162,7 @@
                         <div class="total-amount">
                             <div class="row">
                                 <div class="col-lg-8 col-md-5 col-12">
-                                    @if (Auth::guard('web')->user() && SettingHelper::getSettingValueBySLug('coupon_discount') > 0)
+                                    {{-- @if (Auth::guard('web')->user() && SettingHelper::getSettingValueBySLug('coupon_discount') > 0)
                                         <div class="left">
                                             <div class="checkbox">
                                                 <label
@@ -174,7 +174,7 @@
                                                 </label>
                                             </div>
                                         </div>
-                                    @endif
+                                    @endif --}}
                                 </div>
                                 <div class="col-lg-4 col-md-7 col-12">
                                     <div class="right">

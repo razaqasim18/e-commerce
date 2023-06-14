@@ -41,7 +41,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Content</label>
-                                    <textarea name="content" id="content" class="summernote form-control @error('content') is-invalid @enderror" required>{{ $blog->title }}"</textarea>
+                                    <textarea name="content" id="content" class="summernote form-control @error('content') is-invalid @enderror" required>{{ $blog->content }}"</textarea>
                                     @error('content')
                                         <div class="d-block invalid-feedback">{{ $message }}</div>
                                     @enderror

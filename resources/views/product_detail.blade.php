@@ -39,8 +39,12 @@
                     <div class="quickview-content">
                         <h2>{{ $product->product }}</h2>
 
-                        <h3>
+                        <h3 id="normal-price">
                             <a class="midium-banner single-banner a">PRICE</a>: {{ 'PKR ' . $product->price }}
+                        </h3>
+                        <h3 id="discount-price" style="display:none">
+                            <a class="midium-banner single-banner a">Discount PRICE</a>:
+                            {{ 'PKR ' . ((int) $product->price - ((int) $product->price * 20) / 100) }}
                         </h3>
                         <h3>
                             <a class="midium-banner single-banner a">IN Stock</a>:
@@ -50,12 +54,21 @@
                                 Available
                             @endif
                         </h3>
-
+                        @if ($product->is_other == 0)
+                            <div class="quickview-peragraph">
+                                <div class="checkbox">
+                                    <label class="checkbox-inline  @if (Session::get('coupon_discount') > 0) checked @endif"
+                                        for="discount_coupon">
+                                        <input name="discount_coupon" id="discount_coupon" type="checkbox">
+                                        Check To Apply Coupon Discount
+                                    </label>
+                                </div>
+                            </div>
+                        @endif
                         <div class="quickview-peragraph">
                             <p>{{ $product->description }}</p>
                         </div>
                         <br />
-
                         @if ($product->in_stock == 0 || $product->in_stock <= 0)
                             <div class="add-to-cart">
                                 <a href="javascript:void(0)" class="btn btn-danger" style="cursor: not-allowed;">Out of
@@ -95,7 +108,7 @@
                                 <!--/ End Input Order -->
                             </div>
                             <div class="add-to-cart">
-                                <a href="javascript:void(0)" id="addToCart" data-productid="{{ $product->id }}"
+                                <a href="javascript:void(0)" id="addToCartProductPage" data-productid="{{ $product->id }}"
                                     class="btn">Add to cart</a>
                             </div>
                         @endif
@@ -108,6 +121,66 @@
 
 @section('script')
     <script>
+        $("#discount_coupon").click(function() {
+            if ($('#discount_coupon').is(':checked')) {
+                $("#normal-price").css("display", 'none')
+                $("#discount-price").css("display", 'block')
+            } else {
+                $("#normal-price").css("display", 'block')
+                $("#discount-price").css("display", 'none')
+            }
+        });
+
+
+        $('body').on("click", "a#addToCartProductPage", function() {
+            let productid = $(this).data('productid');
+            let productquantity = 1;
+            if ($("input#quantity").val()) {
+                productquantity = $("input#quantity").val();
+            }
+            let discount_coupon = 0;
+            if ($('#discount_coupon').is(':checked')) {
+                discount_coupon = 1;
+            } else {
+                discount_coupon = 0;
+            }
+            console.log(discount_coupon);
+
+            $.ajax({
+                url: '{{ route('cart.insert') }}',
+                method: "POST",
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    productid: productid,
+                    quantity: productquantity,
+                    discount_coupon: discount_coupon,
+                },
+                beforeSend: function() {
+                    $(".preloader").show();
+                },
+                complete: function() {
+                    $(".preloader").hide();
+                },
+                success: function(response) {
+                    if (response.type) {
+                        iziToast.success({
+                            title: 'Success',
+                            message: response.msg,
+                            position: 'topRight'
+                        });
+                        getItemList();
+                    } else {
+                        iziToast.error({
+                            title: 'Error!',
+                            message: response.msg,
+                            position: 'topRight'
+                        });
+                    }
+                }
+            });
+        });
+
+
         $('a#addToCartDiscount').on('click', function() {
             let productid = $(this).data('productid');
             let productquantity = 1;
@@ -120,7 +193,8 @@
                 data: {
                     _token: '{{ csrf_token() }}',
                     productid: productid,
-                    quantity: productquantity
+                    quantity: productquantity,
+
                 },
                 beforeSend: function() {
                     $(".preloader").show();

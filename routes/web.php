@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\CartHelper;
 use App\Helpers\CustomHelper;
 use App\Models\Admin;
 use App\Models\Commission;
@@ -153,6 +154,12 @@ Route::get('/all/rank', function () {
         }
     }
 
+});
+
+// check discount
+Route::get('/discount', function () {
+    $result = CartHelper::cartDiscountCount(Auth::guard('web')->user()->id);
+    dd($result);
 });
 
 // home pages

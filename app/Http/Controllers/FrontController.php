@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\City;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\OrderDiscount;
 use App\Models\OrderShippingDetail;
 use App\Models\Product;
 use App\Notifications\AdminNotification;
@@ -137,6 +138,12 @@ class FrontController extends Controller
                     $product->in_stock = 0;
                 }
                 $product->save();
+
+                $orderdiscount = new OrderDiscount();
+                $orderdiscount->user_id = Auth::guard('web')->user()->id;
+                $orderdiscount->order_id = $order->id;
+                $orderdiscount->product_id = $item->id;
+                $orderdiscount->save();
             }
         }
 

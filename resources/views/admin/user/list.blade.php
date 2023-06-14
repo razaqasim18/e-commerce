@@ -63,10 +63,12 @@
                                                         @if ($row->image)
                                                             <img alt="image"
                                                                 src="{{ asset('uploads/user_profile') . '/' . $row->image }}"
-                                                                class="user-img-radious-style" width="50px">
+                                                                class="user-img-radious-style" width="50px"
+                                                                height="50px">
                                                         @else
                                                             <img alt="image" src="{{ asset('img/users/user-3.png') }}"
-                                                                class="user-img-radious-style" width="50px">
+                                                                class="user-img-radious-style" width="50px"
+                                                                height="50px">
                                                         @endif
                                                     </td>
                                                     <td>

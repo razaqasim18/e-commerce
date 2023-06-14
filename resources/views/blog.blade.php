@@ -41,7 +41,7 @@
                                                     class="fa fa-calendar"></i>{{ date('d M Y', strtotime($blog->created_at)) }}</a></span>
                                     </div>
                                     <div class="content">
-                                        {{ $blog->content }}
+                                        {!! $blog->content !!}
                                     </div>
                                 </div>
                             </div>

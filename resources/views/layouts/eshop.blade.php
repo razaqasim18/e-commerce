@@ -426,7 +426,7 @@
         $('document').ready(function() {
             getItemList();
 
-            $('a#addToCart').on('click', function() {
+            $('body').on("click", "a#addToCart", function() {
                 let productid = $(this).data('productid');
                 let productquantity = 1;
                 if ($("input#quantity").val()) {
