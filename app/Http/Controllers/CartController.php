@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\CartHelper;
 use App\Helpers\SettingHelper;
+use App\Models\Point;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,8 +22,8 @@ class CartController extends Controller
         $product = Product::findorFail($request->productid);
         $price = (SettingHelper::getSettingValueBySLug('gst_charges')) ?
         ceil($product->price + $product->price / SettingHelper::getSettingValueBySLug('gst_charges')) : $product->price;
-        if($request->discount_coupon){
-            $price = $price - ($price * (20/100));
+        if ($request->discount_coupon) {
+            $price = $price - ($price * (20 / 100));
         }
         $item = \Cart::session('normal')->get($request->productid);
         if ($item) {
@@ -74,11 +75,19 @@ class CartController extends Controller
 
     public function insertDiscount(Request $request)
     {
-        if(Auth::guard('web')->check()){
-            if(CartHelper::cartDiscountCount(Auth::guard('web')->user()->id)) {
+        if (Auth::guard('web')->check()) {
+            if (CartHelper::cartDiscountCount(Auth::guard('web')->user()->id)) {
                 $json = ['type' => 0, 'msg' => 'Reached Monthly Discount Product Limit'];
                 return response()->json($json);
             }
+
+            $point = Point::where("user_id", Auth::guard('web')->user()->id)->first();
+            $point($point) ? $point->point : 0;
+            if ($point < 100) {
+                $json = ['type' => 0, 'msg' => 'Total Point should be greater than 100'];
+                return response()->json($json);
+            }
+
         } else {
             $json = ['type' => 0, 'msg' => 'Please Login To Add Discount Product'];
             return response()->json($json);
@@ -90,7 +99,7 @@ class CartController extends Controller
         $price = $price - ($product->price * ($product->discount / 100));
 
         $countDiscountCart = \Cart::session('discount')->getContent()->count();
-        if( $countDiscountCart >= 3){
+        if ($countDiscountCart >= 3) {
             $json = ['type' => 0, 'msg' => 'Discount Product is out of limit'];
             return response()->json($json);
         }
