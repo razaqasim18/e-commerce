@@ -1436,11 +1436,14 @@ Version:1.0
 
 .hero-slider .single-slider {
     height: auto;
-    background-image: url('../eshop/images/banner.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     /*height: 510px;*/
+}
+
+.forcustom {
+    background-image: url('../eshop/images/banner.jpeg');
 }
 
 .hero-slider .text-inner {}
@@ -1819,7 +1822,7 @@ Version:1.0
 
 .small-banner .single-banner img {
     height: 100%;
-    width: 100%;
+    max-width: 100%;
     -webkit-transition: all 0.4s ease;
     -moz-transition: all 0.4s ease;
     transition: all 0.4s ease;

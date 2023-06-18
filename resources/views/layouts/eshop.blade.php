@@ -200,6 +200,12 @@
                                                         href="{{ route('about.us') }}">About Us</a></li>
                                                 <li @if (Route::current()->getName() == 'success.stories') class="active" @endif><a
                                                         href="{{ route('success.stories') }}">Leaders Stories</a></li>
+                                                @if (SettingHelper::getSettingValueBySLug('catalog'))
+                                                    <li>
+                                                        <a download
+                                                            href="{{ asset('uploads/catalog') . '/' . SettingHelper::getSettingValueBySLug('catalog') }}">Catalog</a>
+                                                    </li>
+                                                @endif
                                             </ul>
                                         </div>
                                     </div>
@@ -421,6 +427,32 @@
     <script src="{{ asset('eshop/js/active.js') }}"></script>
     <script src="{{ asset('bundles/izitoast/js/iziToast.min.js') }}"></script>
 
+    <script>
+        function refreshCSRFToken() {
+            $.ajax({
+                url: '{{ route('refresh-csrf-token') }}',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    // Update the CSRF token value in the meta tag
+                    $('meta[name="csrf-token"]').attr('content', response.csrf_token);
+
+                    // Update the CSRF token value in the AJAX headers
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': response.csrf_token
+                        }
+                    });
+                }
+            });
+        }
+
+        $.ajaxSetup({
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name="csrf-token"]').attr('content'));
+            }
+        });
+    </script>
     @yield('script')
     <script>
         $('document').ready(function() {
@@ -432,6 +464,7 @@
                 if ($("input#quantity").val()) {
                     productquantity = $("input#quantity").val();
                 }
+                refreshCSRFToken();
                 $.ajax({
                     url: '{{ route('cart.insert') }}',
                     method: "POST",
@@ -468,6 +501,7 @@
             $('body').on("click", "a.removeProduct", function() {
                 let productid = $(this).data('productid');
                 let isdiscount = $(this).data('isdiscount');
+                refreshCSRFToken();
                 $.ajax({
                     url: '{{ route('cart.delete') }}',
                     method: "POST",

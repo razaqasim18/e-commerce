@@ -5,16 +5,145 @@
 @section('style')
 @endsection
 @section('content')
-    <div class="main-content">
+    <div class="main-content" style=" padding-right: 30px; padding-top: 80px;">
         <section class="section">
             <div class="section-body">
                 <div class="row">
+
+                    <div class="col-12 col-md-12 col-lg-12"
+                        style="background-image:url('{{ asset('eshop/images/banner.png') }}'); height: 240px; background-size: cover; background-attachment: fixed; background-origin: initial; background-repeat: no-repeat;background-position: center;">
+                    </div>
+
+                    <div class="col-12 col-md-12 col-lg-12">
+                        <div class="author-box-center" style="top: -40px;position: relative; display: flex;">
+                            <div>
+                                <img alt="image"
+                                    src="{{ Auth::guard('web')->user()->image ? asset('uploads/user_profile') . '/' . Auth::guard('web')->user()->image : asset('img/users/user-3.png') }}"
+                                    class="rounded-circle author-box-picture" width="150px" height="150px">
+                            </div>
+                            <div style="margin: 45px 0 0 10px;">
+                                <div class="author-box-name">
+                                    <h4 class="mt-2">{{ Auth::guard('web')->user()->name }}</h4>
+                                </div>
+                                <div class="author-box-job">
+                                    {{ Auth::guard('web')->user()->userpoint ? (Auth::guard('web')->user()->userpoint->commission ? Auth::guard('web')->user()->userpoint->commission->title : '') : '' }}
+                                    @if (Auth::guard('web')->user()->userpoint)
+                                        @if (Auth::guard('web')->user()->userpoint->commission)
+                                            @if (Auth::guard('web')->user()->userpoint->commission->ptp)
+                                                {!! '<br/>' !!}{{ 'PTP ' . Auth::guard('web')->user()->userpoint->commission->ptp }}
+                                            @endif
+                                        @endif
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="col-12 col-md-12 col-lg-12">
                         <div class="row">
                             <div class="col-12 col-md-2 col-lg-2 text-center p-1">
                                 <div class="card card-primary">
-                                    <div class="card-header text-center" style="display:block; padding:6px; color: #212529;">
+                                    <div class="card-header text-center p-1"
+                                        style="display:block; padding:6px; color: #212529;">
+                                        <h6>Total Sale Point</h6>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4> {{ $user['point'] ? $user['point']->point : 0 }} </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-2 col-lg-2 text-center p-1">
+                                <div class="card card-primary">
+                                    <div class="card-header text-center"
+                                        style="display:block; padding:6px; color: #212529;">
+                                        <h6>Personal Sale Point</h6>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4>
+                                                    {{ $user['personalpoint'] ? ($user['personalpoint']->count ? $user['personalpoint']->count : 0) : 0 }}
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-2 col-lg-2 text-center p-1">
+                                <div class="card card-primary">
+                                    <div class="card-header text-center"
+                                        style="display:block; padding:6px; color: #212529;">
+                                        <h6>Wallet</h6>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4> {{ $user['wallet'] ? $user['wallet']->amount : 0 }} </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-2 col-lg-2 text-center p-1">
+                                <div class="card card-primary">
+                                    <div class="card-header text-center"
+                                        style="display:block; padding:6px; color: #212529;">
+                                        <h6>Reward</h6>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4> {{ $user['wallet'] ? $user['wallet']->gift : 0 }} </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-2 col-lg-2 text-center p-1">
+                                <div class="card card-primary">
+                                    <div class="card-header text-center"
+                                        style="display:block; padding:6px; color: #212529;">
+                                        <h6>Total Earning</h6>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4> {{ $user['wallet'] ? $user['wallet']->amount : 0 }} </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-2 col-lg-2 text-center p-1">
+                                <div class="card card-primary">
+                                    <div class="card-header text-center"
+                                        style="display:block; padding:6px; color: #212529;">
+                                        <h6>Monthly Earning</h6>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4>
+                                                    {{ $user['personalmonthlyearning']->count ? $user['personalmonthlyearning']->count : 0 }}
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-12 col-lg-12">
+                        <div class="row">
+                            <div class="col-12 col-md-2 col-lg-2 text-center p-1">
+                                <div class="card card-primary">
+                                    <div class="card-header text-center"
+                                        style="display:block; padding:6px; color: #212529;">
                                         <h6>Pending Orders</h6>
                                     </div>
                                     <div class="card-body p-0">
@@ -122,179 +251,178 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-12 col-lg-5">
-                        <div class="card card-primary author-box">
-                            <div class="card-body">
-                                <div class="author-box-center">
-                                    <img alt="image"
-                                        src="{{ Auth::guard('web')->user()->image ? asset('uploads/user_profile') . '/' . Auth::guard('web')->user()->image : asset('img/users/user-3.png') }}"
-                                        class="rounded-circle author-box-picture" width="100px" height="100px">
-                                    <div class="clearfix"></div>
-                                    <div class="author-box-name">
-                                        <h4 class="mt-2">{{ Auth::guard('web')->user()->name }}</h4>
-                                    </div>
-                                    <div class="author-box-job">
-                                        {{ Auth::guard('web')->user()->userpoint ? (Auth::guard('web')->user()->userpoint->commission ? Auth::guard('web')->user()->userpoint->commission->title : '') : '' }}
-                                    </div>
-                                </div>
-                                <div class="text-center">
-                                    <div class="author-box-description">
-                                        <p class="mb-0">
-                                            <strong>ID: </strong>
-                                            {{ 'ABF-' . Auth::guard('web')->user()->id }}
-                                        </p>
-                                    </div>
-                                    <div class="w-100 d-sm-none"></div>
-                                </div>
-                                <div class="py-2">
-                                    <p class="clearfix mb-1">
-                                        <span class="float-left">
-                                            Birthday
-                                        </span>
-                                        <span class="float-right text-muted">
-                                            {{ date('d M Y', strtotime(Auth::guard('web')->user()->dob)) }}
-                                        </span>
-                                    </p>
-                                    <p class="clearfix mb-1">
-                                        <span class="float-left">
-                                            Phone
-                                        </span>
-                                        <span class="float-right text-muted">
-                                            {{ Auth::guard('web')->user()->phone }}
-                                        </span>
-                                    </p>
-                                    <p class="clearfix mb-1">
-                                        <span class="float-left">
-                                            Mail
-                                        </span>
-                                        <span class="float-right text-muted">
-                                            {{ Auth::guard('web')->user()->email }}
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
+                    <!--<div class="col-12 col-md-12 col-lg-5">-->
+                    <!--    <div class="card card-primary author-box">-->
+                    <!--        <div class="card-body">-->
+                    <!--            <div class="author-box-center">-->
+                    <!--                <img alt="image"-->
+                    <!--                    src="{{ Auth::guard('web')->user()->image ? asset('uploads/user_profile') . '/' . Auth::guard('web')->user()->image : asset('img/users/user-3.png') }}"-->
+                    <!--                    class="rounded-circle author-box-picture" width="100px" height="100px">-->
+                    <!--                <div class="clearfix"></div>-->
+                    <!--                <div class="author-box-name">-->
+                    <!--                    <h4 class="mt-2">{{ Auth::guard('web')->user()->name }}</h4>-->
+                    <!--                </div>-->
+                    <!--                <div class="author-box-job">-->
+                    <!--                    {{ Auth::guard('web')->user()->userpoint ? (Auth::guard('web')->user()->userpoint->commission ? Auth::guard('web')->user()->userpoint->commission->title : '') : '' }}-->
+                    <!--                </div>-->
+                    <!--            </div>-->
+                    <!--            <div class="text-center">-->
+                    <!--                <div class="author-box-description">-->
+                    <!--                    <p class="mb-0">-->
+                    <!--                        <strong>ID: </strong>-->
+                    <!--                        {{ 'ABF-' . Auth::guard('web')->user()->id }}-->
+                    <!--                    </p>-->
+                    <!--                </div>-->
+                    <!--                <div class="w-100 d-sm-none"></div>-->
+                    <!--            </div>-->
+                    <!--            <div class="py-2">-->
+                    <!--                <p class="clearfix mb-1">-->
+                    <!--                    <span class="float-left">-->
+                    <!--                        Birthday-->
+                    <!--                    </span>-->
+                    <!--                    <span class="float-right text-muted">-->
+                    <!--                        {{ date('d M Y', strtotime(Auth::guard('web')->user()->dob)) }}-->
+                    <!--                    </span>-->
+                    <!--                </p>-->
+                    <!--                <p class="clearfix mb-1">-->
+                    <!--                    <span class="float-left">-->
+                    <!--                        Phone-->
+                    <!--                    </span>-->
+                    <!--                    <span class="float-right text-muted">-->
+                    <!--                        {{ Auth::guard('web')->user()->phone }}-->
+                    <!--                    </span>-->
+                    <!--                </p>-->
+                    <!--                <p class="clearfix mb-1">-->
+                    <!--                    <span class="float-left">-->
+                    <!--                        Mail-->
+                    <!--                    </span>-->
+                    <!--                    <span class="float-right text-muted">-->
+                    <!--                        {{ Auth::guard('web')->user()->email }}-->
+                    <!--                    </span>-->
+                    <!--                </p>-->
+                    <!--            </div>-->
+                    <!--        </div>-->
+                    <!--    </div>-->
+                    <!--</div>-->
 
-                        </div>
-                    </div>
+                    <!--<div class="col-12 col-md-12 col-lg-7">-->
+                    <!--    <div class="row">-->
+                    <!--        <div class="col-12 col-md-6 col-lg-6 text-center">-->
+                    <!--            <div class="card card-primary">-->
+                    <!--                <div class="card-header text-center"-->
+                    <!--                    style="display:block; padding:6px; color: #212529;">-->
+                    <!--                    <h4>Total Sale Point</h4>-->
+                    <!--                </div>-->
+                    <!--                <div class="card-body p-1">-->
+                    <!--                    <div class="row">-->
+                    <!--                        <div class="col-6">-->
+                    <!--                            <h3> {{ $user['point'] ? $user['point']->point : 0 }} </h3>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="col-6 text-right">-->
+                    <!--                            <i class="fas fa-shopping-cart card-icon font-30 p-r-20"></i>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
+                    <!--            </div>-->
+                    <!--        </div>-->
 
-                    <div class="col-12 col-md-12 col-lg-7">
-                        <div class="row">
-                            <div class="col-12 col-md-6 col-lg-6 text-center">
-                                <div class="card card-primary">
-                                    <div class="card-header text-center"
-                                        style="display:block; padding:6px; color: #212529;">
-                                        <h4>Total Sale Point</h4>
-                                    </div>
-                                    <div class="card-body p-1">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <h3> {{ $user['point'] ? $user['point']->point : 0 }} </h3>
-                                            </div>
-                                            <div class="col-6 text-right">
-                                                <i class="fas fa-shopping-cart card-icon font-30 p-r-20"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <!--        <div class="col-12 col-md-6 col-lg-6 text-center">-->
+                    <!--            <div class="card card-primary">-->
+                    <!--                <div class="card-header text-center"-->
+                    <!--                    style="display:block; padding:6px; color: #212529;">-->
+                    <!--                    <h4>Personal Sale Point</h4>-->
+                    <!--                </div>-->
+                    <!--                <div class="card-body p-1">-->
+                    <!--                    <div class="row">-->
+                    <!--                        <div class="col-6">-->
+                    <!--                            <h3> {{ $user['personalpoint'] ? $user['personalpoint']->count : 0 }} </h3>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="col-6 text-right">-->
+                    <!--                            <i class="fas fa-shopping-cart card-icon font-30 p-r-20"></i>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
+                    <!--            </div>-->
+                    <!--        </div>-->
 
-                            <div class="col-12 col-md-6 col-lg-6 text-center">
-                                <div class="card card-primary">
-                                    <div class="card-header text-center"
-                                        style="display:block; padding:6px; color: #212529;">
-                                        <h4>Personal Sale Point</h4>
-                                    </div>
-                                    <div class="card-body p-1">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <h3> {{ $user['personalpoint'] ? $user['personalpoint']->count : 0 }} </h3>
-                                            </div>
-                                            <div class="col-6 text-right">
-                                                <i class="fas fa-shopping-cart card-icon font-30 p-r-20"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <!--        <div class="col-12 col-md-6 col-lg-6 text-center">-->
+                    <!--            <div class="card card-primary">-->
+                    <!--                <div class="card-header text-center"-->
+                    <!--                    style="display:block; padding:6px; color: #212529;">-->
+                    <!--                    <h4>Wallet</h4>-->
+                    <!--                </div>-->
+                    <!--                <div class="card-body p-1">-->
+                    <!--                    <div class="row">-->
+                    <!--                        <div class="col-6">-->
+                    <!--                            <h3> Rs: {{ $user['wallet'] ? $user['wallet']->amount : 0 }} </h3>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="col-6 text-right">-->
+                    <!--                            <i class="fas fa-shopping-cart card-icon font-30 p-r-20"></i>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
+                    <!--            </div>-->
+                    <!--        </div>-->
 
-                            <div class="col-12 col-md-6 col-lg-6 text-center">
-                                <div class="card card-primary">
-                                    <div class="card-header text-center"
-                                        style="display:block; padding:6px; color: #212529;">
-                                        <h4>Wallet</h4>
-                                    </div>
-                                    <div class="card-body p-1">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <h3> Rs: {{ $user['wallet'] ? $user['wallet']->amount : 0 }} </h3>
-                                            </div>
-                                            <div class="col-6 text-right">
-                                                <i class="fas fa-shopping-cart card-icon font-30 p-r-20"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <!--        <div class="col-12 col-md-6 col-lg-6 text-center">-->
+                    <!--            <div class="card card-primary">-->
+                    <!--                <div class="card-header text-center"-->
+                    <!--                    style="display:block; padding:6px; color: #212529;">-->
+                    <!--                    <h4>Reward</h4>-->
+                    <!--                </div>-->
+                    <!--                <div class="card-body p-1">-->
+                    <!--                    <div class="row">-->
+                    <!--                        <div class="col-6">-->
+                    <!--                            <h3> Rs: {{ $user['wallet'] ? $user['wallet']->gift : 0 }} </h3>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="col-6 text-right">-->
+                    <!--                            <i class="fas fa-shopping-cart card-icon font-30 p-r-20"></i>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
+                    <!--            </div>-->
+                    <!--        </div>-->
 
-                            <div class="col-12 col-md-6 col-lg-6 text-center">
-                                <div class="card card-primary">
-                                    <div class="card-header text-center"
-                                        style="display:block; padding:6px; color: #212529;">
-                                        <h4>Reward</h4>
-                                    </div>
-                                    <div class="card-body p-1">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <h3> Rs: {{ $user['wallet'] ? $user['wallet']->gift : 0 }} </h3>
-                                            </div>
-                                            <div class="col-6 text-right">
-                                                <i class="fas fa-shopping-cart card-icon font-30 p-r-20"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-6 text-center">
-                                <div class="card card-primary">
-                                    <div class="card-header text-center"
-                                        style="display:block; padding:6px; color: #212529;">
-                                        <h4>Total Earning</h4>
-                                    </div>
-                                    <div class="card-body p-1">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <h3> Rs: {{ $user['wallet'] ? $user['wallet']->amount : 0 }} </h3>
-                                            </div>
-                                            <div class="col-6 text-right">
-                                                <i class="fas fa-shopping-cart card-icon font-30 p-r-20"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-6 text-center">
-                                <div class="card card-primary">
-                                    <div class="card-header text-center"
-                                        style="display:block; padding:6px; color: #212529;">
-                                        <h4>Monthly Earning</h4>
-                                    </div>
-                                    <div class="card-body p-1">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <h3> Rs:
-                                                    {{ $user['personalmonthlyearning']->count ? $user['personalmonthlyearning']->count : 0 }}
-                                                </h3>
-                                            </div>
-                                            <div class="col-6 text-right">
-                                                <i class="fas fa-shopping-cart card-icon font-30 p-r-20"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <!--        <div class="col-12 col-md-6 col-lg-6 text-center">-->
+                    <!--            <div class="card card-primary">-->
+                    <!--                <div class="card-header text-center"-->
+                    <!--                    style="display:block; padding:6px; color: #212529;">-->
+                    <!--                    <h4>Total Earning</h4>-->
+                    <!--                </div>-->
+                    <!--                <div class="card-body p-1">-->
+                    <!--                    <div class="row">-->
+                    <!--                        <div class="col-6">-->
+                    <!--                            <h3> Rs: {{ $user['wallet'] ? $user['wallet']->amount : 0 }} </h3>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="col-6 text-right">-->
+                    <!--                            <i class="fas fa-shopping-cart card-icon font-30 p-r-20"></i>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
+                    <!--            </div>-->
+                    <!--        </div>-->
+                    <!--        <div class="col-12 col-md-6 col-lg-6 text-center">-->
+                    <!--            <div class="card card-primary">-->
+                    <!--                <div class="card-header text-center"-->
+                    <!--                    style="display:block; padding:6px; color: #212529;">-->
+                    <!--                    <h4>Monthly Earning</h4>-->
+                    <!--                </div>-->
+                    <!--                <div class="card-body p-1">-->
+                    <!--                    <div class="row">-->
+                    <!--                        <div class="col-6">-->
+                    <!--                            <h3> Rs:-->
+                    <!--                                {{ $user['personalmonthlyearning']->count ? $user['personalmonthlyearning']->count : 0 }}-->
+                    <!--                            </h3>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="col-6 text-right">-->
+                    <!--                            <i class="fas fa-shopping-cart card-icon font-30 p-r-20"></i>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
+                    <!--            </div>-->
+                    <!--        </div>-->
+                    <!--    </div>-->
+                    <!--</div>-->
                 </div>
 
             </div>

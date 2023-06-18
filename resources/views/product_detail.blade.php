@@ -144,8 +144,7 @@
             } else {
                 discount_coupon = 0;
             }
-            console.log(discount_coupon);
-
+            refreshCSRFToken();
             $.ajax({
                 url: '{{ route('cart.insert') }}',
                 method: "POST",
@@ -187,6 +186,7 @@
             if ($("input#quantity").val()) {
                 productquantity = $("input#quantity").val();
             }
+            refreshCSRFToken();
             $.ajax({
                 url: "{{ route('cart.insert.discount') }}",
                 method: "POST",

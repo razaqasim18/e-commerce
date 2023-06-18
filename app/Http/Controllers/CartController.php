@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\CartHelper;
 use App\Helpers\SettingHelper;
-use App\Models\Point;
+use App\Models\PointTransaction;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -57,7 +57,8 @@ class CartController extends Controller
                 'price' => $price,
                 'attributes' => array(
                     'product_discount' => 0,
-                    'product_price' => $request->quantity * $product->price,
+                    // 'product_price' => $request->quantity * $product->price,
+                    'product_price' => $request->quantity * $price,
                     'product_points' => $request->quantity * $product->points,
                     'product_weight' => $request->quantity * $product->weight,
                     'product_image' => ($product->image) ? $product->image : null,
@@ -81,8 +82,11 @@ class CartController extends Controller
                 return response()->json($json);
             }
 
-            $point = Point::where("user_id", Auth::guard('web')->user()->id)->first();
-            $point($point) ? $point->point : 0;
+            $point = PointTransaction::select(DB::raw("SUM(point) as count"))
+                ->where('user_id', Auth::guard('web')->user()->id)
+                ->where('status', 1)
+                ->where('is_child', 0)
+                ->first();
             if ($point < 100) {
                 $json = ['type' => 0, 'msg' => 'Total Point should be greater than 100'];
                 return response()->json($json);
@@ -137,7 +141,8 @@ class CartController extends Controller
                 'price' => $price,
                 'attributes' => array(
                     'product_discount' => 1,
-                    'product_price' => $request->quantity * $product->price,
+                    // 'product_price' => $request->quantity * $product->price,
+                    'product_price' => $request->quantity * $price,
                     'product_points' => 0,
                     'product_weight' => $request->quantity * $product->weight,
                     'product_image' => ($product->image) ? $product->image : null,

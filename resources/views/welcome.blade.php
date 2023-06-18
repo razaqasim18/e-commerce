@@ -15,10 +15,9 @@
 @endsection
 
 @section('content')
-
-    @if ($banner)
+    @if (count($banner))
         <!-- Slider Area -->
-        <section class="hero-slider">
+        <section class="hero-slider" style="height: 350px;">
             <!-- Single Slider -->
             <div class="single-slider">
                 <div class="glide">
@@ -38,9 +37,9 @@
         <!--/ End Slider Area -->
     @else
         <!--else Slider Area -->
-        <section class="hero-slider">
+        <section class="hero-slider" style="height: 350px;">
             <!-- Single Slider -->
-            <div class="single-slider">
+            <div class="single-slider forcustom" style="height: 350px;">
                 <div class="container">
                     <div class="row no-gutters">
                         <div class="col-lg-9 offset-lg-3 col-12">
@@ -55,6 +54,7 @@
         </section>
         <!--else End Slider Area -->
     @endif
+
     <!-- Start Small Banner  -->
     <section class="small-banner section">
         <div class="container-fluid">
@@ -64,9 +64,6 @@
                     <div class="single-banner">
                         <img src="{{ asset('eshop/images/cream1.jpeg') }}" alt="#">
                         <div class="content">
-                            {{-- <p>Man's Collectons</p>
-                            <h3>Summer travel <br> collection</h3>
-                            <a href="#">Discover Now</a> --}}
                         </div>
                     </div>
                 </div>
@@ -76,9 +73,6 @@
                     <div class="single-banner">
                         <img src="{{ asset('eshop/images/cream2.jpeg') }}" alt="#">
                         <div class="content">
-                            {{-- <p>Bag Collectons</p>
-                            <h3>Awesome Bag <br> 2020</h3>
-                            <a href="#">Shop Now</a> --}}
                         </div>
                     </div>
                 </div>
@@ -88,9 +82,6 @@
                     <div class="single-banner tab-height">
                         <img src="{{ asset('eshop/images/cream3.jpeg') }}" alt="#">
                         <div class="content">
-                            {{-- <p>Flash Sale</p>
-                            <h3>Mid Season <br> Up to <span>40%</span> Off</h3>
-                            <a href="#">Discover Now</a> --}}
                         </div>
                     </div>
                 </div>
@@ -99,7 +90,6 @@
         </div>
     </section>
     <!-- End Small Banner -->
-
 
     <!-- Start Feature Popular -->
     <div class="product-area most-popular section">

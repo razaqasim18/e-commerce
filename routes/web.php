@@ -41,6 +41,10 @@ use Illuminate\Support\Facades\Route;
 //*    *    *    *    *    curl -s https://tryptu.digitallinkcard.xyz/public/schedule-run
 //*    *    *    *    *    curl -s https://tryptu.digitallinkcard.xyz/public/queue-work
 
+Route::get('/refresh-csrf-token', function () {
+    return response()->json(['csrf_token' => csrf_token()]);
+})->name("refresh-csrf-token");
+
 Route::get('/custom-notification', function () {
     $admin = Admin::find(1);
     $msg = "New order is placed";
@@ -410,6 +414,16 @@ Route::prefix('/admin')->name('admin.')->group(function () {
             Route::get('/edit/{id}', [App\Http\Controllers\Admin\BusinessAccountController::class, 'edit'])->name('edit');
             Route::put('/update/{id}', [App\Http\Controllers\Admin\BusinessAccountController::class, 'update'])->name('update');
             Route::delete('/delete/{id}', [App\Http\Controllers\Admin\BusinessAccountController::class, 'delete'])->name('delete');
+        });
+
+        //success
+        Route::prefix('/success/story')->name('success.story.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\SuccessStoryController::class, 'index'])->name('list');
+            Route::get('/add', [App\Http\Controllers\Admin\SuccessStoryController::class, 'add'])->name('add');
+            Route::post('/insert', [App\Http\Controllers\Admin\SuccessStoryController::class, 'insert'])->name('insert');
+            Route::get('/edit/{id}', [App\Http\Controllers\Admin\SuccessStoryController::class, 'edit'])->name('edit');
+            Route::put('/update/{id}', [App\Http\Controllers\Admin\SuccessStoryController::class, 'update'])->name('update');
+            Route::delete('/delete/{id}', [App\Http\Controllers\Admin\SuccessStoryController::class, 'delete'])->name('delete');
         });
 
         //setting

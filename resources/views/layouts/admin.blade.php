@@ -253,6 +253,21 @@
                             </ul>
                         </li>
 
+                        <li class="menu-header">Success Stories</li>
+                        <li class="dropdown">
+                            <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                                    data-feather="settings"></i><span>Success Stories</span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="nav-link" href="{{ route('admin.success.story.add') }}">Add Success
+                                        Stories</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href="{{ route('admin.success.story.list') }}">Success
+                                        Stories List</a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="menu-header">Setting</li>
                         <li class="dropdown">
                             <a href="#" class="menu-toggle nav-link has-dropdown"><i

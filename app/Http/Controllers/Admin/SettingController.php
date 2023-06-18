@@ -71,6 +71,23 @@ class SettingController extends Controller
             );
         }
 
+        $catalog = null;
+        if (!empty($request->file('catalog'))) {
+            $catalog = time().".". $request->file('catalog')->extension();
+            $request
+                ->file('catalog')
+                ->move(public_path('uploads/catalog'), $catalog);
+        } else {
+            $catalog = $request->sitecatalog;
+        }
+
+        if ($catalog) {
+            $setting = Setting::updateOrCreate(
+                ['setting_slug' => 'catalog'],
+                ['setting_value' => $catalog]
+            );
+        }
+
         if ($setting) {
             return redirect()
                 ->route('admin.setting.site')

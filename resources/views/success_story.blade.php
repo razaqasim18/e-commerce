@@ -18,74 +18,22 @@
     <!-- Start Success Stories -->
     <section id="success-stories" class="sectionOne">
         <div class="container">
-            <div class="row rshadow">
-                <div class="col-md-4 employes">
-                    <img src="{{ asset('eshop/images/emp1.jpg ') }}" alt="" />
+            @foreach ($story as $row)
+                <div class="row rshadow">
+                    <div class="col-md-4 employes">
+                        <img style="height: 260px;padding: 20px 0px; width: 200px;"
+                            src="{{ $row->user->image ? asset('uploads/user_profile') . '/' . $row->user->image : asset('eshop/images/emp1.jpg ') }}"
+                            alt="" />
+                    </div>
+                    <div class="col-md-8 empDetails">
+                        <h4>{{ $row->user->name }}</h4>
+                        {{-- <h5>Ceo</h5> --}}
+                        <p>
+                            {!! $row->description !!}
+                        </p>
+                    </div>
                 </div>
-                <div class="col-md-8 empDetails">
-                    <h4>John Doe</h4>
-                    <h5>Ceo</h5>
-                    <p>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                        Necessitatibus dicta numquam, laborum eaque vel totam illum nisi
-                        architecto blanditiis sint earum ad debitis omnis delectus quisquam
-                        error iure veniam ipsum? icta numquam, laborum eaque vel totam illum
-                        nisi architecto blanditiis sint earum ad debitis omnis delectus
-                        quisquam error iure veniam ipsum?
-                    </p>
-                </div>
-            </div>
-            <div class="row rshadow">
-                <div class="col-md-4 employes">
-                    <img src="{{ asset('eshop/images/emp2.jpg') }}" alt="" />
-                </div>
-                <div class="col-md-8 empDetails">
-                    <h4>Chris Floyd</h4>
-                    <h5>Director</h5>
-                    <p>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                        Necessitatibus dicta numquam, laborum eaque vel totam illum nisi
-                        architecto blanditiis sint earum ad debitis omnis delectus quisquam
-                        error iure veniam ipsum? icta numquam, laborum eaque vel totam illum
-                        nisi architecto blanditiis sint earum ad debitis omnis delectus
-                        quisquam error iure veniam ipsum?
-                    </p>
-                </div>
-            </div>
-            <div class="row rshadow">
-                <div class="col-md-4 employes">
-                    <img src="{{ asset('eshop/images/emp3.jpg') }}" alt="" />
-                </div>
-                <div class="col-md-8 empDetails">
-                    <h4>Joe Rogan</h4>
-                    <h5>Markeeting Expert</h5>
-                    <p>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                        Necessitatibus dicta numquam, laborum eaque vel totam illum nisi
-                        architecto blanditiis sint earum ad debitis omnis delectus quisquam
-                        error iure veniam ipsum? icta numquam, laborum eaque vel totam illum
-                        nisi architecto blanditiis sint earum ad debitis omnis delectus
-                        quisquam error iure veniam ipsum?
-                    </p>
-                </div>
-            </div>
-            <div class="row rshadow">
-                <div class="col-md-4 employes">
-                    <img src="{{ asset('eshop/images/emp4.jpg') }}" alt="" />
-                </div>
-                <div class="col-md-8 empDetails">
-                    <h4>David White</h4>
-                    <h5>HR Manager</h5>
-                    <p>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                        Necessitatibus dicta numquam, laborum eaque vel totam illum nisi
-                        architecto blanditiis sint earum ad debitis omnis delectus quisquam
-                        error iure veniam ipsum? icta numquam, laborum eaque vel totam illum
-                        nisi architecto blanditiis sint earum ad debitis omnis delectus
-                        quisquam error iure veniam ipsum?
-                    </p>
-                </div>
-            </div>
+            @endforeach
         </div>
     </section>
     <!--/ End Sucess Stories -->

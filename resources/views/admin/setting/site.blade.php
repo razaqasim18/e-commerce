@@ -105,6 +105,21 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Catalog</label>
+                                        <div class="col-sm-9">
+                                            <input type="file"
+                                                accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                                class="form-control" name="catalog" id="catalog"
+                                                value="{{ old('catalog') }}">
+                                            <input type="hidden" name="sitecatalog"
+                                                value="{{ SettingHelper::getSettingValueBySLug('catalog') }}" />
+                                            @error('catalog')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
 
                                     <div class="card-footer text-right">
                                         <button class="btn btn-secondary" type="reset">Reset</button>

@@ -13,6 +13,7 @@ use App\Models\OrderDetail;
 use App\Models\OrderDiscount;
 use App\Models\OrderShippingDetail;
 use App\Models\Product;
+use App\Models\SuccesStory;
 use App\Notifications\AdminNotification;
 use App\Rules\UserOrderGift;
 use App\Rules\UserOrderWallet;
@@ -58,7 +59,8 @@ class FrontController extends Controller
 
     public function successStories()
     {
-        return view('success_story');
+        $story = SuccesStory::all();
+        return view('success_story', compact('story'));
     }
 
     public function checkoutProcess(Request $request)
